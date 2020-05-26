@@ -9,11 +9,13 @@ import {NgxPrintModule} from 'ngx-print';
 import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonToggleModule } from  '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { MirrorComponent } from './mirror/mirror.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DotsComponent
+    DotsComponent,
+    MirrorComponent
   ],
   imports: [
     BrowserModule,

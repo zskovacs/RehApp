@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DotsComponent } from './dots/dots.component';
+import { MirrorComponent } from './mirror/mirror.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'dots',
     component: DotsComponent
+  },
+  {
+    path: 'mirror',
+    component: MirrorComponent
   },
   {
     path: '**',
