@@ -1,6 +1,16 @@
 {
-  "name": "reh-app",
-  "version": "0.0.0",
+  "name": "rehapp",
+  "version": "1.0.0",
+  "description": "Cognitive tests for Neuropsychological Patients",
+  "author": "Zsolt Kovács <k.zsolt@live.com> (https://github.com/zskovacs)",
+  "bugs": {
+    "url": "https://github.com/zskovacs/RehApp/issues"
+  },
+  "homepage": "https://rehapp.k-zsolt.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zskovacs/RehApp.git"
+},
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
