@@ -77,22 +77,26 @@ export class DotsComponent implements OnInit {
 
   drawReference(canvas: HTMLCanvasElement): string {
     var ctx = canvas.getContext('2d');
-    //
-    ctx.beginPath();
-    ctx.moveTo(125, 75);
-    ctx.lineTo(125 + this.shapeSize, 75);
-    ctx.lineTo(125, 75 + this.shapeSize);
-    ctx.closePath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#666666';
-    ctx.stroke();
 
-    ctx.beginPath();
-    ctx.rect(25, 75, 50, 50);
+    for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
+      ctx.beginPath();
+      ctx.moveTo(8.3 + (i * 58.3), 125);
+      ctx.lineTo(8.3 + this.shapeSize + (i * 58.3), 125);
+      ctx.lineTo(8.3 + (i * 58.3), 125 + this.shapeSize);
+      ctx.closePath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#666666';
+      ctx.stroke();
+    }
 
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#666666';
-    ctx.stroke();
+    for (let i = 0; i < this.settings.numberOfRectangles.value; i++) {
+      ctx.beginPath();
+      ctx.rect(8.3 + (i * 58.3), 25, 50, 50);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#666666';
+      ctx.stroke();
+    }
 
     var img = canvas.toDataURL("image/png");
     return img;
