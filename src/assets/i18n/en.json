@@ -1,0 +1,27 @@
+{
+    "MENU": {
+        "DOTS": "Dots",
+        "MIRROR": "Mirror"
+    },
+    "LABELS": {
+        "SETTINGS": "Settings",
+        "GENERATE": "Generate",
+        "HELPS": "Helps",
+        "HANDICAPS": "Handicaps",
+        "PRINT": "Print"
+
+    },
+    "COMPONENTS": {
+        "DOTS": {
+            "NROFEXERCISE": "Number of Exercises",
+            "NROFRECTANGLE": "Number of Rectalnges",
+            "NROFTRIANGLES": "Number of Triangles",            
+            "HELPWITHSIZE": "Help with Size",
+            "HELPWITHCOLOR": "Help with Color",
+            "MISSINGDOT": "Missing dot",
+            "EXTRADOT": "Extra dot",
+            "LARGEROBJECT": "Larger object",
+            "SMALLEROBJECT": "Smaller object"
+        }
+    }
+}

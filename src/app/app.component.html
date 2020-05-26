@@ -1,16 +1,20 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>  
+  <mat-toolbar-row>
     <h1>RehAPP</h1>
 
-    <span class="menu-spacer"></span>
     <div>
-      <a mat-button [routerLink]="'/dots'"> Dots </a>
+      <a mat-button [routerLink]="'/dots'"> {{'MENU.DOTS' | translate}} </a>
+      <a mat-button [routerLink]="'/mirror'">  {{'MENU.MIRROR' | translate}} </a>
     </div>
+
+    <span class="fill-space"></span>
+
     <div>
-      <a mat-button [routerLink]="'/mirror'"> Mirror </a>
+      <a mat-button (click)="changeLang('en')"> English </a>
+      <a mat-button (click)="changeLang('hu')"> Magyar </a>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="container">
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

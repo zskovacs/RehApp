@@ -1,19 +1,19 @@
 <div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%" fxLayout.xs="column">
 
     <div fxLayout="column" fxFlex="15%" fxFlex.xs="100%" fxLayoutGap="10px">
-        <h2>Settings:</h2>
+        <h2> {{'LABELS.SETTINGS' | translate}}</h2>
 
         <form name="settingsForm" [formGroup]="settingsForm" novalidate>
 
             <div fxLayout="column" fxLayoutAlign="space-between start">
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Number of Exercise</mat-label>
+                    <mat-label> {{'COMPONENTS.DOTS.NROFEXERCISE' | translate}}</mat-label>
                     <input type="number" matInput formControlName="numberOfExercises">
                 </mat-form-field>
 
                 <div fxLayout="column" fxLayoutAlign="space-around start">
-                    <mat-label>Number of Rectangles</mat-label>
+                    <mat-label>{{'COMPONENTS.DOTS.NROFRECTANGLE' | translate}}</mat-label>
                     <mat-button-toggle-group formControlName="numberOfRectangles">
                         <mat-button-toggle value="0">0</mat-button-toggle>
                         <mat-button-toggle value="1">1</mat-button-toggle>
@@ -23,7 +23,7 @@
                 </div>
 
                 <div fxLayout="column" fxLayoutAlign="space-around start">
-                    <mat-label>Number of Triangles</mat-label>
+                    <mat-label>{{'COMPONENTS.DOTS.NROFTRIANGLES' | translate}}</mat-label>
                     <mat-button-toggle-group formControlName="numberOfTriangles">
                         <mat-button-toggle value="0">0</mat-button-toggle>
                         <mat-button-toggle value="1">1</mat-button-toggle>
@@ -33,27 +33,27 @@
                 </div>
             </div>
 
-            <h3>Helps</h3>
+            <h3>{{'LABELS.HELPS' | translate}}</h3>
             <div fxLayout="column" fxLayoutAlign="start none">
-                <mat-checkbox color="primary" formControlName="helpSize">Help with Size</mat-checkbox>
-                <mat-checkbox color="primary" formControlName="helpColor">Help with Color</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="helpSize">{{'COMPONENTS.DOTS.HELPWITHSIZE' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="helpColor">{{'COMPONENTS.DOTS.HELPWITHCOLOR' | translate}}</mat-checkbox>
             </div>
 
-            <h3>Handicaps</h3>
+            <h3>{{'LABELS.HANDICAPS' | translate}}</h3>
             <div fxLayout="column" fxLayoutAlign="start none">
-                <mat-checkbox color="primary" formControlName="hcMissingDot">Missing dot</mat-checkbox>
-                <mat-checkbox color="primary" formControlName="hcExtraDot">Extra dot</mat-checkbox>
-                <mat-checkbox color="primary" formControlName="hcLargerObject">Larger Object</mat-checkbox>
-                <mat-checkbox color="primary" formControlName="hcSmallerObject">Smaller Object</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcMissingDot">{{'COMPONENTS.DOTS.MISSINGDOT' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcExtraDot">{{'COMPONENTS.DOTS.EXTRADOT' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcLargerObject">{{'COMPONENTS.DOTS.LARGEROBJECT' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcSmallerObject">{{'COMPONENTS.DOTS.SMALLEROBJECT' | translate}}</mat-checkbox>
             </div>
 
 
             <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
-                <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">generate</button>
+                <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">{{'LABELS.GENERATE' | translate}}</button>
                 <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint
                     [disabled]="!isGenerated">
                     <mat-icon>print</mat-icon>
-                    print
+                    {{'LABELS.PRINT' | translate}}
                 </button>
             </div>
         </form>
