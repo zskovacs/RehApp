@@ -112,6 +112,8 @@ THE SOFTWARE.
 
 @angular/material/button
 
+@angular/material/button-toggle
+
 @angular/material/checkbox
 
 @angular/material/form-field
