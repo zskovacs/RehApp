@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { DotsComponent } from './dots/dots.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgxPrintModule} from 'ngx-print';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule } from  '@angular/material';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,11 +18,16 @@ import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatBu
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
+    MatInputModule,
     MatIconModule, 
     MatSidenavModule, 
     MatListModule,
+    MatFormFieldModule,
     MatButtonModule,
+    MatCheckboxModule,
     NgxPrintModule
   ],
   providers: [],

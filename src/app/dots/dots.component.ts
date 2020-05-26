@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { ɵNgClassR2Impl } from '@angular/common';
+import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dots',
@@ -10,69 +11,164 @@ export class DotsComponent implements OnInit {
 
   @ViewChild('drawingArea', { static: false }) drawArea: ElementRef;
 
-  settings: Settings;
-  constructor(private renderer: Renderer2) {
-    this.settings = new Settings();
-    this.settings.numberOfRectangle = 1;
-    this.settings.numberOfTriangle = 1;
-    this.settings.helpSize = true;
-    this.settings.helpColor = true;
+  settingsForm: FormGroup;
+  private handicaps: Array<Handicaps>;
+
+  constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
+    this.handicaps = new Array<Handicaps>();
   }
 
-  ngAfterViewInit() {
-
+  public get settings(): { [key: string]: AbstractControl } {
+    return this.settingsForm.controls;
   }
 
   generate(): void {
-    for (let i = 0; i < 5; i++) {
+    this.handicaps.length = 0;
+    this.handicaps.push(Handicaps.None);
+
+    if (this.settings.hcMissingDot.value === true)
+      this.handicaps.push(Handicaps.MissingDot);
+    if (this.settings.hcExtraDot.value === true)
+      this.handicaps.push(Handicaps.ExtraDot);
+    if (this.settings.hcSmallerObject.value === true)
+      this.handicaps.push(Handicaps.SmallerShape);
+    if (this.settings.hcLargerObject.value === true)
+      this.handicaps.push(Handicaps.LargerShape);
+
+    Array.from(this.drawArea.nativeElement.children).forEach(child => {
+      this.renderer.removeChild(this.drawArea.nativeElement, child);
+    });
+
+    for (let i = 0; i < this.settings.numberOfExercises.value; i++) {
       const canvas = this.renderer.createElement('canvas');
       //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
       this.renderer.setProperty(canvas, "height", 200);
       this.renderer.setProperty(canvas, "width", 200);
-      
+
       let url = this.draw(canvas);
       const image = this.renderer.createElement('img');
       this.renderer.setProperty(image, "src", url);
       this.renderer.appendChild(this.drawArea.nativeElement, image);
     }
+
   }
 
   ngOnInit() {
-    // var canvas = (<HTMLCanvasElement>document.getElementById("canvas"));
-    // this.draw(canvas);
+    this.settingsForm = this._formBuilder.group({
+      numberOfExercises: [5, Validators.required],
+      numberOfRectangles: [1, Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
+      numberOfTriangles: [1, Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
+      helpSize: [false, Validators.required],
+      helpColor: [false, Validators.required],
+      hcMissingDot: [false, Validators.required],
+      hcExtraDot: [false, Validators.required],
+      hcSmallerObject: [false, Validators.required],
+      hcLargerObject: [false, Validators.required]
+    });
   }
 
   draw(canvas: HTMLCanvasElement): string {
     let pointSize = 2;
-    let color = "#ff2626";
+    let color = "#000000";
 
-    for (let i = 0; i < this.settings.numberOfRectangle; i++) {
-      let rectangle = this.getRect(this.getRndInteger(50, 100), this.getRndInteger(50, 100), 50);
+
+    let handicappedShape = Math.random() >= 0.5 ? Shape.Rectangle : Shape.Triangle; // true-> rectangle, false -> triangle
+    let actualHandicap = this.getHandicap();
+    let alreadyHandicapped = actualHandicap == Handicaps.None;
+
+    for (let i = 0; i < this.settings.numberOfRectangles.value; i++) {
+
+      let size = 50;
+
+      // HANDICAP - SMALLER OBJECT
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.LargerShape) {
+        size = 70;
+        alreadyHandicapped = true;
+      }
+
+      // HANDICAP - SMALLER OBJECT
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.SmallerShape) {
+        size = 30;
+        alreadyHandicapped = true;
+      }
+
+      let rectangle = this.getRect(this.getRndInteger(50, 100), this.getRndInteger(50, 100), size);
+
+      // HANDICAP - MISSING DOT
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.MissingDot) {
+        rectangle.pop();
+        alreadyHandicapped = true;
+      }
+
+      // HANDICAP - EXTRA DOT
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.ExtraDot) {
+        let randomCoord = new Coordinate(this.getRndInteger(50 - size, 100 - size), this.getRndInteger(50 + size, 100 + size));
+        rectangle.push(randomCoord);
+        alreadyHandicapped = true;
+      }
+
       rectangle.forEach(coord => {
         this.drawCoordinates(canvas, coord, pointSize, color);
       });
 
-      if (this.settings.helpColor)
+
+      if (this.settings.helpColor.value)
         color = '#' + Math.random().toString(16).substr(2, 6);
 
-      if (this.settings.helpSize === true)
+      if (this.settings.helpSize.value === true)
         pointSize++;
     }
 
-    for (let i = 0; i < this.settings.numberOfTriangle; i++) {
-      let triangle = this.getTriangle(this.getRndInteger(50, 100), this.getRndInteger(50, 100), 50);
+    for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
+      let size = 50;
+
+      // HANDICAP - SMALLER OBJECT
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.LargerShape) {
+        size = 60;
+        alreadyHandicapped = true;
+      }
+
+      // HANDICAP - SMALLER OBJECT
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.SmallerShape) {
+        size = 40;
+        alreadyHandicapped = true;
+      }
+
+      let triangle = this.getTriangle(this.getRndInteger(50, 100), this.getRndInteger(50, 100), size);
+
+      // HANDICAP - MISSING DOT
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.MissingDot) {
+        triangle.pop();
+        alreadyHandicapped = true;
+      }
+
+      // HANDICAP - EXTRA DOT
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.ExtraDot) {
+        let randomCoord = new Coordinate(this.getRndInteger(50 - size, 100 - size), this.getRndInteger(50 + size, 100 + size));
+        triangle.push(randomCoord);
+        alreadyHandicapped = true;
+      }
+
       triangle.forEach(coord => {
         this.drawCoordinates(canvas, coord, pointSize, color);
       });
 
-      if (this.settings.helpColor)
+      if (this.settings.helpColor.value)
         color = '#' + Math.random().toString(16).substr(2, 6);
-      if (this.settings.helpSize === true)
+      if (this.settings.helpSize.value === true)
         pointSize++;
     }
 
     var img = canvas.toDataURL("image/png");
     return img;
+  }
+
+
+  getHandicap(): Handicaps {
+    if (this.handicaps.length === 1)
+      return Handicaps.None;
+
+    return this.handicaps[Math.floor(Math.random() * this.handicaps.length)];
   }
 
   drawCoordinates(canvas: HTMLCanvasElement, coord: Coordinate, pointSize: number, color: string): void {
@@ -130,12 +226,17 @@ export class DotsComponent implements OnInit {
   }
 }
 
-class Settings {
-  numberOfTriangle: number;
-  numberOfRectangle: number;
+enum Shape {
+  Rectangle,
+  Triangle
+}
 
-  helpSize: boolean;
-  helpColor: boolean;
+enum Handicaps {
+  None = 0,
+  MissingDot = 1,
+  ExtraDot = 2,
+  SmallerShape = 3,
+  LargerShape = 4
 }
 
 class Coordinate {
