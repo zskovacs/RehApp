@@ -1,0 +1,27 @@
+{
+    "MENU": {
+        "DOTS": "Pontok",
+        "MIRROR": "Tükrözés"
+    },
+    "LABELS": {
+        "SETTINGS": "Beállítások",
+        "GENERATE": "Generálás",
+        "HELPS": "Segítségek",
+        "HANDICAPS": "Nehezítések",
+        "PRINT": "Printelés"
+
+    },
+    "COMPONENTS": {
+        "DOTS": {
+            "NROFEXERCISE": "Feladatok száma",
+            "NROFRECTANGLE": "Négyzetek száma",
+            "NROFTRIANGLES": "Háromszögek száma",            
+            "HELPWITHSIZE": "Segítség mérettel",
+            "HELPWITHCOLOR": "Segítség színekkel",
+            "MISSINGDOT": "Hiányzó pont",
+            "EXTRADOT": "Extra pont",
+            "LARGEROBJECT": "Nagyobb alakzat",
+            "SMALLEROBJECT": "Kisebb alakzat"
+        }
+    }
+}
