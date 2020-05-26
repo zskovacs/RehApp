@@ -13,8 +13,10 @@ export class DotsComponent implements OnInit {
 
   isGenerated: boolean;
   settingsForm: FormGroup;
+
   private handicaps: Array<Handicaps>;
   private shapeSize = 50;
+  private colors = ["#262626", "#f20019", "#70fe00", "#0086fe", "#fefe00", "fed38b"];
 
   constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
     this.handicaps = new Array<Handicaps>();
@@ -98,8 +100,8 @@ export class DotsComponent implements OnInit {
 
   draw(canvas: HTMLCanvasElement): string {
     let pointSize = 2;
-    let color = "#000000";
-
+    let colornumber = 0;
+    let color = this.colors[colornumber];
 
     let handicappedShape = Math.random() >= 0.5 ? Shape.Rectangle : Shape.Triangle; // true-> rectangle, false -> triangle
     let actualHandicap = this.getHandicap();
@@ -142,7 +144,7 @@ export class DotsComponent implements OnInit {
 
 
       if (this.settings.helpColor.value)
-        color = '#' + Math.random().toString(16).substr(2, 6);
+        color = this.colors[++colornumber];
 
       if (this.settings.helpSize.value === true)
         pointSize++;
@@ -183,7 +185,7 @@ export class DotsComponent implements OnInit {
       });
 
       if (this.settings.helpColor.value)
-        color = '#' + Math.random().toString(16).substr(2, 6);
+        color = this.colors[++colornumber];
       if (this.settings.helpSize.value === true)
         pointSize++;
     }
