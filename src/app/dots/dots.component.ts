@@ -64,8 +64,8 @@ export class DotsComponent implements OnInit {
     this.isGenerated = false;
     this.settingsForm = this._formBuilder.group({
       numberOfExercises: [5, Validators.required],
-      numberOfRectangles: [1, Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
-      numberOfTriangles: [1, Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
+      numberOfRectangles: ["1", Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
+      numberOfTriangles: ["1", Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
       helpSize: [false, Validators.required],
       helpColor: [false, Validators.required],
       hcMissingDot: [false, Validators.required],

@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { DotsComponent } from './dots/dots.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgxPrintModule} from 'ngx-print';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonToggleModule } from  '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
 
@@ -29,6 +29,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatFormFieldModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatButtonToggleModule,
     NgxPrintModule,
     FlexLayoutModule
   ],

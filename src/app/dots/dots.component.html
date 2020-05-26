@@ -1,25 +1,37 @@
-<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%" fxLayout.xs="column">
+<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%"
+    fxLayout.xs="column">
 
     <div fxLayout="column" fxFlex="15%" fxFlex.xs="100%" fxLayoutGap="10px">
         <h2>Settings:</h2>
 
-        <form fxLayout="column" name="settingsForm" [formGroup]="settingsForm" novalidate>
+        <form name="settingsForm" [formGroup]="settingsForm" novalidate>
 
-            <div fxLayout="column" fxLayoutAlign="start none" fxFlex="1 1 auto">
+            <div fxLayout="column" fxLayoutAlign="space-between start">
 
                 <mat-form-field appearance="outline">
                     <mat-label>Number of Exercise</mat-label>
                     <input type="number" matInput formControlName="numberOfExercises">
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Number of Rectangles</mat-label>
-                    <input type="number" matInput formControlName="numberOfRectangles">
-                </mat-form-field>
 
-                <mat-form-field appearance="outline">
+                <div fxLayout="column" fxLayoutAlign="space-around start">
+                    <mat-label>Number of Rectangles</mat-label>
+                    <mat-button-toggle-group formControlName="numberOfRectangles">
+                        <mat-button-toggle value="0">0</mat-button-toggle>
+                        <mat-button-toggle value="1">1</mat-button-toggle>
+                        <mat-button-toggle value="2">2</mat-button-toggle>
+                        <mat-button-toggle value="3">3</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="space-around start">
                     <mat-label>Number of Triangles</mat-label>
-                    <input type="number" matInput formControlName="numberOfTriangles">
-                </mat-form-field>
+                    <mat-button-toggle-group formControlName="numberOfTriangles">
+                        <mat-button-toggle value="0">0</mat-button-toggle>
+                        <mat-button-toggle value="1">1</mat-button-toggle>
+                        <mat-button-toggle value="2">2</mat-button-toggle>
+                        <mat-button-toggle value="3">3</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
             </div>
 
             <h3>Helps</h3>
@@ -39,9 +51,11 @@
 
             <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
                 <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">generate</button>
-                <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint [disabled]="!isGenerated">
+                <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint
+                    [disabled]="!isGenerated">
                     <mat-icon>print</mat-icon>
-                    print</button>
+                    print
+                </button>
             </div>
         </form>
     </div>
