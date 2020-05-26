@@ -1,17 +1,16 @@
-<div class="container" fxLayout="row" fxLayoutAlign="center center">
+<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%" fxLayout.xs="column">
 
-    <div fxLayout="column" fxLayoutAlign="center none" fxFlex="1 0 auto">
+    <div fxLayout="column" fxFlex="15%" fxFlex.xs="100%" fxLayoutGap="10px">
         <h2>Settings:</h2>
 
-        <form name="settingsForm" [formGroup]="settingsForm" novalidate (ngSubmit)="generate()">
+        <form fxLayout="column" name="settingsForm" [formGroup]="settingsForm" novalidate>
 
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                <mat-form-field appearance="outline" fxFlex="100">
+            <div fxLayout="column" fxLayoutAlign="start none" fxFlex="1 1 auto">
+
+                <mat-form-field appearance="outline">
                     <mat-label>Number of Exercise</mat-label>
                     <input type="number" matInput formControlName="numberOfExercises">
                 </mat-form-field>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="1 0 auto">
                 <mat-form-field appearance="outline">
                     <mat-label>Number of Rectangles</mat-label>
                     <input type="number" matInput formControlName="numberOfRectangles">
@@ -22,39 +21,30 @@
                     <input type="number" matInput formControlName="numberOfTriangles">
                 </mat-form-field>
             </div>
+
             <h3>Helps</h3>
-            <div fxLayout="column" fxLayoutAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="start none">
                 <mat-checkbox color="primary" formControlName="helpSize">Help with Size</mat-checkbox>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-checkbox color="primary" formControlName="helpColor">Help with Color</mat-checkbox>
             </div>
 
             <h3>Handicaps</h3>
-            <div fxLayout="column" fxLayoutAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="start none">
                 <mat-checkbox color="primary" formControlName="hcMissingDot">Missing dot</mat-checkbox>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-checkbox color="primary" formControlName="hcExtraDot">Extra dot</mat-checkbox>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-checkbox color="primary" formControlName="hcLargerObject">Larger Object</mat-checkbox>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-checkbox color="primary" formControlName="hcSmallerObject">Smaller Object</mat-checkbox>
             </div>
 
 
-            <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
                 <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">generate</button>
+                <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint [disabled]="!isGenerated">
+                    <mat-icon>print</mat-icon>
+                    print</button>
             </div>
-
         </form>
     </div>
 
-    <div id="print-section" #drawingArea fxLayout="column" fxLayoutAlign="center none" fxFlex="1 0 auto"></div>
-
-    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-        <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint>print</button>
-    </div>
+    <div style="margin-top: 50px;" fxFlex="75%" id="print-section" #drawingArea></div>
 </div>

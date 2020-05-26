@@ -11,8 +11,10 @@ export class DotsComponent implements OnInit {
 
   @ViewChild('drawingArea', { static: false }) drawArea: ElementRef;
 
+  isGenerated: boolean;
   settingsForm: FormGroup;
   private handicaps: Array<Handicaps>;
+  private shapeSize = 50;
 
   constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
     this.handicaps = new Array<Handicaps>();
@@ -39,21 +41,25 @@ export class DotsComponent implements OnInit {
       this.renderer.removeChild(this.drawArea.nativeElement, child);
     });
 
-    for (let i = 0; i < this.settings.numberOfExercises.value; i++) {
+    for (let i = 0; i <= this.settings.numberOfExercises.value; i++) {
       const canvas = this.renderer.createElement('canvas');
       //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
       this.renderer.setProperty(canvas, "height", 200);
       this.renderer.setProperty(canvas, "width", 200);
 
-      let url = this.draw(canvas);
+      let url = i == 0 ? this.drawReference(canvas) : this.draw(canvas);
       const image = this.renderer.createElement('img');
       this.renderer.setProperty(image, "src", url);
+      this.renderer.setStyle(image, "border", "solid 1px grey");
       this.renderer.appendChild(this.drawArea.nativeElement, image);
     }
-
+    this.isGenerated = true;
   }
 
+
+
   ngOnInit() {
+    this.isGenerated = false;
     this.settingsForm = this._formBuilder.group({
       numberOfExercises: [5, Validators.required],
       numberOfRectangles: [1, Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
@@ -65,6 +71,29 @@ export class DotsComponent implements OnInit {
       hcSmallerObject: [false, Validators.required],
       hcLargerObject: [false, Validators.required]
     });
+  }
+
+  drawReference(canvas: HTMLCanvasElement): string {
+    var ctx = canvas.getContext('2d');
+    //
+    ctx.beginPath();
+    ctx.moveTo(125, 75);
+    ctx.lineTo(125 + this.shapeSize, 75);
+    ctx.lineTo(125, 75 + this.shapeSize);
+    ctx.closePath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#666666';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.rect(25, 75, 50, 50);
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#666666';
+    ctx.stroke();
+
+    var img = canvas.toDataURL("image/png");
+    return img;
   }
 
   draw(canvas: HTMLCanvasElement): string {
