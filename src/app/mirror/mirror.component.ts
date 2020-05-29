@@ -70,7 +70,7 @@ export class MirrorComponent implements OnInit {
     return img;
   }
 
-  private getYpositions(): Array<number> {
+  private getYPositions(): Array<number> {
     let positions = Array.from({ length: 9 }, (v, k) => k * this.step).map(x => x + this.step); // 20-180
     let vertices = this.settings.vertices.value;
 
@@ -95,7 +95,7 @@ export class MirrorComponent implements OnInit {
     return pos;
   }
 
-  drawShape(canvas: HTMLCanvasElement): Array<Vector2D> {
+  private drawShape(canvas: HTMLCanvasElement): Array<Vector2D> {
     let ctx = canvas.getContext('2d');
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
@@ -104,7 +104,7 @@ export class MirrorComponent implements OnInit {
     let startPoint = new Vector2D(this.width / 2, this.step);
     points.push(startPoint);
 
-    let posY = this.getYpositions();
+    let posY = this.getYPositions();
     for (let i = 1; i < posY.length; i++) {
 
       let last = points[points.length - 1];
@@ -138,7 +138,6 @@ export class MirrorComponent implements OnInit {
       helpingPoints.forEach(p => {
         this.drawCoordinates(canvas, p, 2, '#000000')
       });
-
     }
 
     return points;
