@@ -1,7 +1,9 @@
 img {
     padding: 10px;
 }
-
+.watermark {
+    visibility: hidden;
+  }
 mat-button-toggle-group {
     flex-wrap: wrap;
   }

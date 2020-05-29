@@ -8,8 +8,8 @@
         "GENERATE": "Generálás",
         "HELPS": "Segítségek",
         "HANDICAPS": "Nehezítések",
-        "PRINT": "Printelés"
-
+        "PRINT": "Printelés",
+        "WATERMARK": "Generálva a {{value}} oldalon"
     },
     "COMPONENTS": {
         "DOTS": {

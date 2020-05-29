@@ -1,4 +1,5 @@
-<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%" fxLayout.xs="column">
+<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%"
+    fxLayout.xs="column">
 
     <div fxLayout="column" fxFlex="15%" fxFlex.xs="100%" fxLayoutGap="10px">
         <h2> {{'LABELS.SETTINGS' | translate}}</h2>
@@ -25,18 +26,22 @@
 
             <h3>{{'LABELS.HELPS' | translate}}</h3>
             <div fxLayout="column" fxLayoutAlign="start none">
-                <mat-checkbox color="primary" formControlName="helpPoints">{{'COMPONENTS.MIRROR.HELPWITHPOINTS' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="helpPoints">
+                    {{'COMPONENTS.MIRROR.HELPWITHPOINTS' | translate}}</mat-checkbox>
             </div>
 
             <h3>{{'LABELS.HANDICAPS' | translate}}</h3>
             <div fxLayout="column" fxLayoutAlign="start none">
-                <mat-checkbox color="primary" formControlName="hcNoGrid">{{'COMPONENTS.MIRROR.NOGRID' | translate}}</mat-checkbox>
-                <mat-checkbox color="primary" formControlName="hcOblique">{{'COMPONENTS.MIRROR.OBLIQUE' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcNoGrid">{{'COMPONENTS.MIRROR.NOGRID' | translate}}
+                </mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcOblique">{{'COMPONENTS.MIRROR.OBLIQUE' | translate}}
+                </mat-checkbox>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
-                <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">{{'LABELS.GENERATE' | translate}}</button>
-                <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint
+                <button mat-raised-button (click)="generate()"
+                    [disabled]="settingsForm.invalid">{{'LABELS.GENERATE' | translate}}</button>
+                <button mat-raised-button color="primary" styleSheetFile="assets/print.css" printSectionId="print-section" ngxPrint
                     [disabled]="!isGenerated">
                     <mat-icon>print</mat-icon>
                     {{'LABELS.PRINT' | translate}}
@@ -45,5 +50,8 @@
         </form>
     </div>
 
-    <div style="margin-top: 50px;" fxFlex="75%" id="print-section" #drawingArea></div>
+    <div style="margin-top: 50px;" fxFlex="75%" id="print-section">
+        <div class="watermark">{{'LABELS.WATERMARK' | translate: { value: 'https://rehapp.k-zsolt.com/' }  }}</div>
+        <div #drawingArea></div>
+    </div>
 </div>
