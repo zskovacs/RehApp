@@ -1,4 +1,49 @@
-<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%"
-    fxLayout.xs="column">
-    <p>Coming soon</p>
+<div class="container" fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start" fxFlex="100%" fxLayout.xs="column">
+
+    <div fxLayout="column" fxFlex="15%" fxFlex.xs="100%" fxLayoutGap="10px">
+        <h2> {{'LABELS.SETTINGS' | translate}}</h2>
+
+        <form name="settingsForm" [formGroup]="settingsForm" novalidate>
+
+            <div fxLayout="column" fxLayoutAlign="space-between start">
+
+                <mat-form-field appearance="outline">
+                    <mat-label> {{'COMPONENTS.MIRROR.NROFEXERCISE' | translate}}</mat-label>
+                    <input type="number" matInput formControlName="numberOfExercises">
+                </mat-form-field>
+
+                <div fxLayout="column" fxLayoutAlign="space-around start">
+                    <mat-label>{{'COMPONENTS.MIRROR.LEVEL' | translate}}</mat-label>
+                    <mat-button-toggle-group formControlName="vertices">
+                        <mat-button-toggle value="3">1</mat-button-toggle>
+                        <mat-button-toggle value="5">2</mat-button-toggle>
+                        <mat-button-toggle value="7">3</mat-button-toggle>
+                        <mat-button-toggle value="9">4</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <h3>{{'LABELS.HELPS' | translate}}</h3>
+            <div fxLayout="column" fxLayoutAlign="start none">
+                <mat-checkbox color="primary" formControlName="helpPoints">{{'COMPONENTS.MIRROR.HELPWITHPOINTS' | translate}}</mat-checkbox>
+            </div>
+
+            <h3>{{'LABELS.HANDICAPS' | translate}}</h3>
+            <div fxLayout="column" fxLayoutAlign="start none">
+                <mat-checkbox color="primary" formControlName="hcNoGrid">{{'COMPONENTS.MIRROR.NOGRID' | translate}}</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="hcOblique">{{'COMPONENTS.MIRROR.OBLIQUE' | translate}}</mat-checkbox>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
+                <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">{{'LABELS.GENERATE' | translate}}</button>
+                <button mat-raised-button color="primary" printSectionId="print-section" ngxPrint
+                    [disabled]="!isGenerated">
+                    <mat-icon>print</mat-icon>
+                    {{'LABELS.PRINT' | translate}}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-top: 50px;" fxFlex="75%" id="print-section" #drawingArea></div>
 </div>

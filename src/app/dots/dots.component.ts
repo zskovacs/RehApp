@@ -20,7 +20,10 @@ export class DotsComponent implements OnInit {
   public settingsForm: FormGroup;
 
   private handicaps: Array<Handicap>;
-  private shapeSize = 50;
+  private readonly shapeSize = 50;
+  private readonly width = 200;
+  private readonly height = 200;
+
   private colors = ["#262626", "#f20019", "#70fe00", "#0086fe", "#fefe00", "fed38b"];
 
   constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
@@ -67,20 +70,21 @@ export class DotsComponent implements OnInit {
     for (let i = 0; i <= this.settings.numberOfExercises.value; i++) {
       const canvas = this.renderer.createElement('canvas');
       //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
-      this.renderer.setProperty(canvas, "height", 200);
-      this.renderer.setProperty(canvas, "width", 200);
+      this.renderer.setProperty(canvas, "height", this.height);
+      this.renderer.setProperty(canvas, "width", this.width);
 
       let url = i == 0 ? this.drawReference(canvas) : this.drawShapes(canvas);
       const image = this.renderer.createElement('img');
       this.renderer.setProperty(image, "src", url);
       this.renderer.setStyle(image, "border", "solid 1px grey");
+      this.renderer.setStyle(image, "margin", "5px");
       this.renderer.appendChild(this.drawArea.nativeElement, image);
     }
     this.isGenerated = true;
   }
 
   private drawReference(canvas: HTMLCanvasElement): string {
-    var ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
 
     for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
       ctx.beginPath();
@@ -102,7 +106,7 @@ export class DotsComponent implements OnInit {
       ctx.stroke();
     }
 
-    var img = canvas.toDataURL("image/png");
+    let img = canvas.toDataURL("image/png");
     return img;
   }
 
@@ -196,7 +200,7 @@ export class DotsComponent implements OnInit {
         pointSize++;
     }
 
-    var img = canvas.toDataURL("image/png");
+    let img = canvas.toDataURL("image/png");
     return img;
   }
 
@@ -208,7 +212,7 @@ export class DotsComponent implements OnInit {
   }
 
   private drawCoordinates(canvas: HTMLCanvasElement, coord: Vector2D, pointSize: number, color: string): void {
-    var ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d");
 
     ctx.fillStyle = color; // Red color
 
@@ -218,13 +222,13 @@ export class DotsComponent implements OnInit {
   }
 
   private getRectangle(startPoint: Vector2D, size: number): Rectangle {
-    var rotateInDeg = Math.floor(Math.random() * 360);
-    var center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
+    let rotateInDeg = Math.floor(Math.random() * 360);
+    let center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
 
-    var r1 = new Vector2D(startPoint.x, startPoint.y);
-    var r2 = new Vector2D(startPoint.x + size, startPoint.y);
-    var r3 = new Vector2D(startPoint.x, startPoint.y + size);
-    var r4 = new Vector2D(startPoint.x + size, startPoint.y + size);
+    let r1 = new Vector2D(startPoint.x, startPoint.y);
+    let r2 = new Vector2D(startPoint.x + size, startPoint.y);
+    let r3 = new Vector2D(startPoint.x, startPoint.y + size);
+    let r4 = new Vector2D(startPoint.x + size, startPoint.y + size);
 
     return [
       this.rotatePoint(center, r1, rotateInDeg),
@@ -234,12 +238,12 @@ export class DotsComponent implements OnInit {
   }
 
   private getTriangle(startPoint: Vector2D, size: number): Triangle {
-    var rotateInDeg = Math.floor(Math.random() * 360);
-    var center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
+    let rotateInDeg = Math.floor(Math.random() * 360);
+    let center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
 
-    var r1 = new Vector2D(startPoint.x, startPoint.y);
-    var r2 = new Vector2D(startPoint.x + size, startPoint.y);
-    var r3 = new Vector2D(startPoint.x, startPoint.y + size);
+    let r1 = new Vector2D(startPoint.x, startPoint.y);
+    let r2 = new Vector2D(startPoint.x + size, startPoint.y);
+    let r3 = new Vector2D(startPoint.x, startPoint.y + size);
 
     return [
       this.rotatePoint(center, r1, rotateInDeg),
@@ -252,9 +256,9 @@ export class DotsComponent implements OnInit {
   }
 
   private rotatePoint(pivot: Vector2D, point: Vector2D, angle: number): Vector2D {
-    var angleInRad = angle * Math.PI / 180;
-    var x = Math.round((Math.cos(angleInRad) * (point.x - pivot.x)) - (Math.sin(angleInRad) * (point.y - pivot.y)) + pivot.x);
-    var y = Math.round((Math.sin(angleInRad) * (point.x - pivot.x)) + (Math.cos(angleInRad) * (point.y - pivot.y)) + pivot.y);
+    let angleInRad = angle * Math.PI / 180;
+    let x = Math.round((Math.cos(angleInRad) * (point.x - pivot.x)) - (Math.sin(angleInRad) * (point.y - pivot.y)) + pivot.x);
+    let y = Math.round((Math.sin(angleInRad) * (point.x - pivot.x)) + (Math.cos(angleInRad) * (point.y - pivot.y)) + pivot.y);
     return new Vector2D(x, y);
   }
 
