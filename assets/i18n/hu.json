@@ -22,6 +22,13 @@
             "EXTRADOT": "Extra pont",
             "LARGEROBJECT": "Nagyobb alakzat",
             "SMALLEROBJECT": "Kisebb alakzat"
+        },
+        "MIRROR": {
+            "NROFEXERCISE": "Feladatok száma",
+            "LEVEL": "Szint",            
+            "HELPWITHPOINTS": "Segítség pontokkal",
+            "NOGRID": "Négyzetrács nélkül",
+            "OBLIQUE": "Ferde vonalak"
         }
     }
 }
