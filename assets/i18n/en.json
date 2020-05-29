@@ -8,8 +8,8 @@
         "GENERATE": "Generate",
         "HELPS": "Helps",
         "HANDICAPS": "Handicaps",
-        "PRINT": "Print"
-
+        "PRINT": "Print",
+        "WATERMARK": "Generated on {{value}} site"
     },
     "COMPONENTS": {
         "DOTS": {
