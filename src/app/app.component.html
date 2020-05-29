@@ -1,20 +1,31 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <h1>RehAPP</h1>
+<div fxLayout="column" fxFlexFill>
+  <div class="header"></div>
+  <mat-toolbar color="primary" class="fixed-navbar mat-elevation-z10">
+    <mat-toolbar-row>
+      <h1 class="title"><span class="color">REH</span>APP</h1>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <div>
+        <a mat-button [routerLink]="'/dots'"> {{'MENU.DOTS' | translate}} </a>
+        <a mat-button [routerLink]="'/mirror'"> {{'MENU.MIRROR' | translate}} </a>
+      </div>
 
-    <div>
-      <a mat-button [routerLink]="'/dots'"> {{'MENU.DOTS' | translate}} </a>
-      <a mat-button [routerLink]="'/mirror'">  {{'MENU.MIRROR' | translate}} </a>
-    </div>
+      <span class="fill-space"></span>
 
-    <span class="fill-space"></span>
+      <div>
+        <a mat-button (click)="changeLang('en')"> English </a>
+        <a mat-button (click)="changeLang('hu')"> Magyar </a>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
-    <div>
-      <a mat-button (click)="changeLang('en')"> English </a>
-      <a mat-button (click)="changeLang('hu')"> Magyar </a>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
-<div class="container">
-  <router-outlet></router-outlet>
+  <div class="container" fxFlex>
+    <router-outlet></router-outlet>
+  </div>
+
+  <mat-toolbar color="primary" class="fixed-navbar mat-elevation-z10">
+    <mat-toolbar-row>
+      <p class="footer"> © {{year}} <a href="mailto:k.zsolt@live.com">Zsolt Kovács</a></p>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </div>

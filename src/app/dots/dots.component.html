@@ -50,7 +50,7 @@
 
             <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 10px">
                 <button mat-raised-button (click)="generate()" [disabled]="settingsForm.invalid">{{'LABELS.GENERATE' | translate}}</button>
-                <button mat-raised-button color="primary" styleSheetFile="assets/print.css" printSectionId="print-section" ngxPrint
+                <button mat-raised-button color="accent" styleSheetFile="assets/print.css" printSectionId="print-section" ngxPrint
                     [disabled]="!isGenerated">
                     <mat-icon>print</mat-icon>
                     {{'LABELS.PRINT' | translate}}

@@ -23,6 +23,7 @@ export class AppComponent {
           this._translateService.setDefaultLang('hu');
       });
   }
+  year = new Date().getFullYear();
   changeLang(lang: string): void {
     this._translateService.use(lang);
   }
