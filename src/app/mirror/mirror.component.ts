@@ -64,7 +64,28 @@ export class MirrorComponent implements OnInit {
       this.drawGrid(canvas);
 
     this.drawMirror(canvas);
-    this.drawShape(canvas);
+
+    let vertices = this.getVertices();
+
+    let ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(vertices[0].x, vertices[0].y);
+    vertices.forEach(p => {
+      ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    if (this.settings.helpPoints.value === true) {
+      let helpingPoints = vertices.map<Vector2D>(p => {
+        p.x = this.width - p.x;
+        return p;
+      });
+      helpingPoints.forEach(p => {
+        this.drawCoordinates(canvas, p, 2, '#000000')
+      });
+    }
 
     let img = canvas.toDataURL("image/png");
     return img;
@@ -95,50 +116,28 @@ export class MirrorComponent implements OnInit {
     return pos;
   }
 
-  private drawShape(canvas: HTMLCanvasElement): Array<Vector2D> {
-    let ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
+  private getVertices(): Array<Vector2D> {
     let points = Array<Vector2D>();
 
-    let startPoint = new Vector2D(this.width / 2, this.step);
-    points.push(startPoint);
-
     let posY = this.getYPositions();
+    points.push(new Vector2D(this.width / 2, posY[0]));
+    
     for (let i = 1; i < posY.length; i++) {
-
       let last = points[points.length - 1];
-      if (posY[i] == last.y)
-        continue;
 
-      let posX = this.getXPosition(last.x);
+       let posX = this.getXPosition(last.x);
 
       if (this.settings.hcOblique.value === false || Math.random() >= 0.3) {
         let connectPoint = new Vector2D(posX, last.y);
         points.push(connectPoint);
       }
+
       let nextPoint = new Vector2D(posX, posY[i]);
       points.push(nextPoint);
     }
+
     let finalPoint = new Vector2D(this.width / 2, points[points.length - 1].y);
-
     points.push(finalPoint);
-    ctx.beginPath();
-    ctx.moveTo(startPoint.x, startPoint.y);
-    points.forEach(p => {
-      ctx.lineTo(p.x, p.y);
-    });
-    ctx.stroke();
-
-    if (this.settings.helpPoints.value === true) {
-      let helpingPoints = points.map<Vector2D>(p => {
-        p.x = this.width - p.x;
-        return p;
-      });
-      helpingPoints.forEach(p => {
-        this.drawCoordinates(canvas, p, 2, '#000000')
-      });
-    }
 
     return points;
   }
