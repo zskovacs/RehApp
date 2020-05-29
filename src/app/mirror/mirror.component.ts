@@ -1,7 +1,6 @@
 import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { Vector2D } from '../shared/models/vector2d';
-import { Step } from './models/steps';
 
 @Component({
   selector: 'app-mirror',
@@ -27,7 +26,6 @@ export class MirrorComponent implements OnInit {
   public get settings(): { [key: string]: AbstractControl } {
     return this.settingsForm.controls;
   }
-
 
   ngOnInit() {
     this.settingsForm = this._formBuilder.group({
@@ -64,6 +62,7 @@ export class MirrorComponent implements OnInit {
   private drawShapes(canvas: HTMLCanvasElement): string {
     if (this.settings.hcNoGrid.value === false)
       this.drawGrid(canvas);
+
     this.drawMirror(canvas);
     this.drawShape(canvas);
 
@@ -72,36 +71,56 @@ export class MirrorComponent implements OnInit {
   }
 
   private getYpositions(): Array<number> {
-    let positions = Array.from({ length: 9 }, (v, k) => k * this.step).map(x => x + 20);
+    let positions = Array.from({ length: 9 }, (v, k) => k * this.step).map(x => x + this.step); // 20-180
+    let vertices = this.settings.vertices.value;
 
-    return this.getRandomElementFromArray(positions, this.settings.vertices.value);
+    let result = new Array(vertices),
+      len = positions.length,
+      taken = new Array(len);
+    if (vertices > len)
+      throw new RangeError("getRandom: more elements taken than available");
+    while (vertices--) {
+      let x = Math.floor(Math.random() * len);
+      result[vertices] = positions[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result.sort((a, b) => a - b);
+
+  }
+  private getXPosition(lastPos: number): number {
+    let pos = this.getRndInteger(0, 5) * this.step;
+    if (lastPos == pos)
+      return this.getXPosition(pos);
+
+    return pos;
   }
 
   drawShape(canvas: HTMLCanvasElement): Array<Vector2D> {
     let ctx = canvas.getContext('2d');
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
-    var points = Array<Vector2D>();
+    let points = Array<Vector2D>();
 
-    var startPoint = new Vector2D(this.width / 2, this.step);
+    let startPoint = new Vector2D(this.width / 2, this.step);
     points.push(startPoint);
 
-    var posY = this.getYpositions();
+    let posY = this.getYpositions();
     for (let i = 1; i < posY.length; i++) {
 
-      var last = points[points.length - 1];
+      let last = points[points.length - 1];
       if (posY[i] == last.y)
         continue;
-      var posX = this.getRndInteger(0, 5) * this.step;
 
-      if (this.settings.hcOblique.value === false || Math.random() >= 0.5) {
-        var connectPoint = new Vector2D(posX, last.y);
+      let posX = this.getXPosition(last.x);
+
+      if (this.settings.hcOblique.value === false || Math.random() >= 0.3) {
+        let connectPoint = new Vector2D(posX, last.y);
         points.push(connectPoint);
       }
-      var nextPoint = new Vector2D(posX, posY[i]);
+      let nextPoint = new Vector2D(posX, posY[i]);
       points.push(nextPoint);
     }
-    var finalPoint = new Vector2D(this.width / 2, points[points.length - 1].y);
+    let finalPoint = new Vector2D(this.width / 2, points[points.length - 1].y);
 
     points.push(finalPoint);
     ctx.beginPath();
@@ -112,7 +131,7 @@ export class MirrorComponent implements OnInit {
     ctx.stroke();
 
     if (this.settings.helpPoints.value === true) {
-      var helpingPoints = points.map<Vector2D>(p => {
+      let helpingPoints = points.map<Vector2D>(p => {
         p.x = this.width - p.x;
         return p;
       });
@@ -123,20 +142,6 @@ export class MirrorComponent implements OnInit {
     }
 
     return points;
-  }
-
-  getRandomElementFromArray(arr: Array<number>, n: number): Array<number> {
-    var result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
-    if (n > len)
-      throw new RangeError("getRandom: more elements taken than available");
-    while (n--) {
-      var x = Math.floor(Math.random() * len);
-      result[n] = arr[x in taken ? taken[x] : x];
-      taken[x] = --len in taken ? taken[len] : len;
-    }
-    return result.sort((a, b) => a - b);
   }
 
 

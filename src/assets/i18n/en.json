@@ -22,6 +22,13 @@
             "EXTRADOT": "Extra dot",
             "LARGEROBJECT": "Larger object",
             "SMALLEROBJECT": "Smaller object"
+        },
+        "MIRROR": {
+            "NROFEXERCISE": "Number of Exercises",
+            "LEVEL": "Level",            
+            "HELPWITHPOINTS": "Help with Points",
+            "NOGRID": "No Grid",
+            "OBLIQUE": "Oblique lines"
         }
     }
 }
