@@ -1,6 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
-import { ɵNgClassR2Impl } from '@angular/common';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Vector2D } from '../shared/models/vector2d';
+import { Handicap } from './models/handicap';
+import { Shape } from './models/shape';
+
+type Rectangle = [Vector2D, Vector2D, Vector2D, Vector2D];
+type Triangle = [Vector2D, Vector2D, Vector2D];
 
 @Component({
   selector: 'app-dots',
@@ -11,54 +16,20 @@ export class DotsComponent implements OnInit {
 
   @ViewChild('drawingArea', { static: false }) drawArea: ElementRef;
 
-  isGenerated: boolean;
-  settingsForm: FormGroup;
+  public isGenerated: boolean;
+  public settingsForm: FormGroup;
 
-  private handicaps: Array<Handicaps>;
+  private handicaps: Array<Handicap>;
   private shapeSize = 50;
   private colors = ["#262626", "#f20019", "#70fe00", "#0086fe", "#fefe00", "fed38b"];
 
   constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
-    this.handicaps = new Array<Handicaps>();
+    this.handicaps = new Array<Handicap>();
   }
 
   public get settings(): { [key: string]: AbstractControl } {
     return this.settingsForm.controls;
   }
-
-  generate(): void {
-    this.handicaps.length = 0;
-    this.handicaps.push(Handicaps.None);
-
-    if (this.settings.hcMissingDot.value === true)
-      this.handicaps.push(Handicaps.MissingDot);
-    if (this.settings.hcExtraDot.value === true)
-      this.handicaps.push(Handicaps.ExtraDot);
-    if (this.settings.hcSmallerObject.value === true)
-      this.handicaps.push(Handicaps.SmallerShape);
-    if (this.settings.hcLargerObject.value === true)
-      this.handicaps.push(Handicaps.LargerShape);
-
-    Array.from(this.drawArea.nativeElement.children).forEach(child => {
-      this.renderer.removeChild(this.drawArea.nativeElement, child);
-    });
-
-    for (let i = 0; i <= this.settings.numberOfExercises.value; i++) {
-      const canvas = this.renderer.createElement('canvas');
-      //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
-      this.renderer.setProperty(canvas, "height", 200);
-      this.renderer.setProperty(canvas, "width", 200);
-
-      let url = i == 0 ? this.drawReference(canvas) : this.draw(canvas);
-      const image = this.renderer.createElement('img');
-      this.renderer.setProperty(image, "src", url);
-      this.renderer.setStyle(image, "border", "solid 1px grey");
-      this.renderer.appendChild(this.drawArea.nativeElement, image);
-    }
-    this.isGenerated = true;
-  }
-
-
 
   ngOnInit() {
     this.isGenerated = false;
@@ -75,7 +46,40 @@ export class DotsComponent implements OnInit {
     });
   }
 
-  drawReference(canvas: HTMLCanvasElement): string {
+  public generate(): void {
+    this.handicaps.length = 0;
+    this.handicaps.push(Handicap.None);
+
+    if (this.settings.hcMissingDot.value === true)
+      this.handicaps.push(Handicap.MissingDot);
+    if (this.settings.hcExtraDot.value === true)
+      this.handicaps.push(Handicap.ExtraDot);
+    if (this.settings.hcSmallerObject.value === true)
+      this.handicaps.push(Handicap.SmallerShape);
+    if (this.settings.hcLargerObject.value === true)
+      this.handicaps.push(Handicap.LargerShape);
+
+    //Clear Drawing Area
+    Array.from(this.drawArea.nativeElement.children).forEach(child => {
+      this.renderer.removeChild(this.drawArea.nativeElement, child);
+    });
+
+    for (let i = 0; i <= this.settings.numberOfExercises.value; i++) {
+      const canvas = this.renderer.createElement('canvas');
+      //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
+      this.renderer.setProperty(canvas, "height", 200);
+      this.renderer.setProperty(canvas, "width", 200);
+
+      let url = i == 0 ? this.drawReference(canvas) : this.drawShapes(canvas);
+      const image = this.renderer.createElement('img');
+      this.renderer.setProperty(image, "src", url);
+      this.renderer.setStyle(image, "border", "solid 1px grey");
+      this.renderer.appendChild(this.drawArea.nativeElement, image);
+    }
+    this.isGenerated = true;
+  }
+
+  private drawReference(canvas: HTMLCanvasElement): string {
     var ctx = canvas.getContext('2d');
 
     for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
@@ -102,43 +106,42 @@ export class DotsComponent implements OnInit {
     return img;
   }
 
-  draw(canvas: HTMLCanvasElement): string {
+  private drawShapes(canvas: HTMLCanvasElement): string {
     let pointSize = 2;
     let colornumber = 0;
     let color = this.colors[colornumber];
 
     let handicappedShape = Math.random() >= 0.5 ? Shape.Rectangle : Shape.Triangle; // true-> rectangle, false -> triangle
     let actualHandicap = this.getHandicap();
-    let alreadyHandicapped = actualHandicap == Handicaps.None;
+    let alreadyHandicapped = actualHandicap == Handicap.None;
 
     for (let i = 0; i < this.settings.numberOfRectangles.value; i++) {
 
       let size = 50;
 
       // HANDICAP - SMALLER OBJECT
-      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.LargerShape) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicap.LargerShape) {
         size = 70;
         alreadyHandicapped = true;
       }
 
       // HANDICAP - SMALLER OBJECT
-      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.SmallerShape) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicap.SmallerShape) {
         size = 30;
         alreadyHandicapped = true;
       }
 
-      let rectangle = this.getRect(this.getRndInteger(50, 100), this.getRndInteger(50, 100), size);
+      let rectangle = this.getRectangle(this.getRandomPoint(50, 100), size);
 
       // HANDICAP - MISSING DOT
-      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.MissingDot) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicap.MissingDot) {
         rectangle.pop();
         alreadyHandicapped = true;
       }
 
       // HANDICAP - EXTRA DOT
-      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicaps.ExtraDot) {
-        let randomCoord = new Coordinate(this.getRndInteger(50 - size, 100 - size), this.getRndInteger(50 + size, 100 + size));
-        rectangle.push(randomCoord);
+      if (!alreadyHandicapped && handicappedShape == Shape.Rectangle && actualHandicap == Handicap.ExtraDot) {
+        rectangle.push(this.getRandomPoint(50, 100, size));
         alreadyHandicapped = true;
       }
 
@@ -158,29 +161,28 @@ export class DotsComponent implements OnInit {
       let size = 50;
 
       // HANDICAP - SMALLER OBJECT
-      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.LargerShape) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicap.LargerShape) {
         size = 60;
         alreadyHandicapped = true;
       }
 
       // HANDICAP - SMALLER OBJECT
-      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.SmallerShape) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicap.SmallerShape) {
         size = 40;
         alreadyHandicapped = true;
       }
 
-      let triangle = this.getTriangle(this.getRndInteger(50, 100), this.getRndInteger(50, 100), size);
+      let triangle = this.getTriangle(this.getRandomPoint(50, 100), size);
 
       // HANDICAP - MISSING DOT
-      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.MissingDot) {
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicap.MissingDot) {
         triangle.pop();
         alreadyHandicapped = true;
       }
 
       // HANDICAP - EXTRA DOT
-      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicaps.ExtraDot) {
-        let randomCoord = new Coordinate(this.getRndInteger(50 - size, 100 - size), this.getRndInteger(50 + size, 100 + size));
-        triangle.push(randomCoord);
+      if (!alreadyHandicapped && handicappedShape == Shape.Triangle && actualHandicap == Handicap.ExtraDot) {
+        triangle.push(this.getRandomPoint(50, 100, size));
         alreadyHandicapped = true;
       }
 
@@ -198,15 +200,14 @@ export class DotsComponent implements OnInit {
     return img;
   }
 
-
-  getHandicap(): Handicaps {
+  private getHandicap(): Handicap {
     if (this.handicaps.length === 1)
-      return Handicaps.None;
+      return Handicap.None;
 
     return this.handicaps[Math.floor(Math.random() * this.handicaps.length)];
   }
 
-  drawCoordinates(canvas: HTMLCanvasElement, coord: Coordinate, pointSize: number, color: string): void {
+  private drawCoordinates(canvas: HTMLCanvasElement, coord: Vector2D, pointSize: number, color: string): void {
     var ctx = canvas.getContext("2d");
 
     ctx.fillStyle = color; // Red color
@@ -216,69 +217,48 @@ export class DotsComponent implements OnInit {
     ctx.fill(); // Close the path and fill.
   }
 
-  getRect(x: number, y: number, size: number): Coordinate[] {
-    var coordinates = new Array<Coordinate>();
+  private getRectangle(startPoint: Vector2D, size: number): Rectangle {
     var rotateInDeg = Math.floor(Math.random() * 360);
-    var center = new Coordinate(x + size / 2, y + size / 2);
+    var center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
 
-    var r1 = new Coordinate(x, y);
-    var r2 = new Coordinate(x + size, y);
-    var r3 = new Coordinate(x, y + size);
-    var r4 = new Coordinate(x + size, y + size);
-    coordinates.push(this.rotatePoint(center, r1, rotateInDeg));
-    coordinates.push(this.rotatePoint(center, r2, rotateInDeg));
-    coordinates.push(this.rotatePoint(center, r3, rotateInDeg));
-    coordinates.push(this.rotatePoint(center, r4, rotateInDeg));
+    var r1 = new Vector2D(startPoint.x, startPoint.y);
+    var r2 = new Vector2D(startPoint.x + size, startPoint.y);
+    var r3 = new Vector2D(startPoint.x, startPoint.y + size);
+    var r4 = new Vector2D(startPoint.x + size, startPoint.y + size);
 
-    return coordinates;
+    return [
+      this.rotatePoint(center, r1, rotateInDeg),
+      this.rotatePoint(center, r2, rotateInDeg),
+      this.rotatePoint(center, r3, rotateInDeg),
+      this.rotatePoint(center, r4, rotateInDeg)];
   }
 
-  getTriangle(x: number, y: number, size: number): Coordinate[] {
-    var coordinates = new Array<Coordinate>();
-
+  private getTriangle(startPoint: Vector2D, size: number): Triangle {
     var rotateInDeg = Math.floor(Math.random() * 360);
-    var center = new Coordinate(x + size / 2, y + size / 2);
+    var center = new Vector2D(startPoint.x + size / 2, startPoint.y + size / 2);
 
-    var r1 = new Coordinate(x, y);
-    var r2 = new Coordinate(x + size, y);
-    var r3 = new Coordinate(x, y + size);
+    var r1 = new Vector2D(startPoint.x, startPoint.y);
+    var r2 = new Vector2D(startPoint.x + size, startPoint.y);
+    var r3 = new Vector2D(startPoint.x, startPoint.y + size);
 
-    coordinates.push(this.rotatePoint(center, r1, rotateInDeg));
-    coordinates.push(this.rotatePoint(center, r2, rotateInDeg));
-    coordinates.push(this.rotatePoint(center, r3, rotateInDeg));
-
-    return coordinates;
+    return [
+      this.rotatePoint(center, r1, rotateInDeg),
+      this.rotatePoint(center, r2, rotateInDeg),
+      this.rotatePoint(center, r3, rotateInDeg)];
   }
 
-  rotatePoint(pivot: Coordinate, point: Coordinate, angle: number): Coordinate {
+  private getRandomPoint(min: number, max: number, treshold: number = 0): Vector2D {
+    return new Vector2D(this.getRndInteger(min - treshold, max - treshold), this.getRndInteger(min + treshold, max + treshold));
+  }
+
+  private rotatePoint(pivot: Vector2D, point: Vector2D, angle: number): Vector2D {
     var angleInRad = angle * Math.PI / 180;
     var x = Math.round((Math.cos(angleInRad) * (point.x - pivot.x)) - (Math.sin(angleInRad) * (point.y - pivot.y)) + pivot.x);
     var y = Math.round((Math.sin(angleInRad) * (point.x - pivot.x)) + (Math.cos(angleInRad) * (point.y - pivot.y)) + pivot.y);
-    return new Coordinate(x, y);
+    return new Vector2D(x, y);
   }
-  getRndInteger(min: number, max: number): number {
+
+  private getRndInteger(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min)) + min;
   }
-}
-
-enum Shape {
-  Rectangle,
-  Triangle
-}
-
-enum Handicaps {
-  None = 0,
-  MissingDot = 1,
-  ExtraDot = 2,
-  SmallerShape = 3,
-  LargerShape = 4
-}
-
-class Coordinate {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-  x: number;
-  y: number;
 }
