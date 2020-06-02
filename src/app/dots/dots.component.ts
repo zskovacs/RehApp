@@ -37,7 +37,7 @@ export class DotsComponent implements OnInit {
   ngOnInit() {
     this.isGenerated = false;
     this.settingsForm = this._formBuilder.group({
-      numberOfExercises: [5, Validators.required],
+      numberOfExercises: [11, Validators.required],
       numberOfRectangles: ["1", Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
       numberOfTriangles: ["1", Validators.compose([Validators.min(0), Validators.max(3), Validators.required])],
       helpSize: [false, Validators.required],

@@ -29,7 +29,7 @@ export class MirrorComponent implements OnInit {
 
   ngOnInit() {
     this.settingsForm = this._formBuilder.group({
-      numberOfExercises: [5, Validators.required],
+      numberOfExercises: [12, Validators.required],
       vertices: ["3", Validators.compose([Validators.min(3), Validators.max(10), Validators.required])],
       helpPoints: [false, Validators.required],
       hcNoGrid: [false, Validators.required],
