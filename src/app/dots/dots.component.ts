@@ -53,13 +53,13 @@ export class DotsComponent implements OnInit {
     this.handicaps.length = 0;
     this.handicaps.push(Handicap.None);
 
-    if (this.settings.hcMissingDot.value === true)
+    if (this.settings['hcMissingDot'].value === true)
       this.handicaps.push(Handicap.MissingDot);
-    if (this.settings.hcExtraDot.value === true)
+    if (this.settings['hcExtraDot'].value === true)
       this.handicaps.push(Handicap.ExtraDot);
-    if (this.settings.hcSmallerObject.value === true)
+    if (this.settings['hcSmallerObject'].value === true)
       this.handicaps.push(Handicap.SmallerShape);
-    if (this.settings.hcLargerObject.value === true)
+    if (this.settings['hcLargerObject'].value === true)
       this.handicaps.push(Handicap.LargerShape);
 
     //Clear Drawing Area
@@ -67,7 +67,7 @@ export class DotsComponent implements OnInit {
       this.renderer.removeChild(this.drawArea.nativeElement, child);
     });
 
-    for (let i = 0; i <= this.settings.numberOfExercises.value; i++) {
+    for (let i = 0; i <= this.settings['numberOfExercises'].value; i++) {
       const canvas = this.renderer.createElement('canvas');
       //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
       this.renderer.setProperty(canvas, "height", this.height);
@@ -84,9 +84,9 @@ export class DotsComponent implements OnInit {
   }
 
   private drawReference(canvas: HTMLCanvasElement): string {
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
+    for (let i = 0; i < this.settings['numberOfTriangles'].value; i++) {
       ctx.beginPath();
       ctx.moveTo(8.3 + (i * 58.3), 125);
       ctx.lineTo(8.3 + this.shapeSize + (i * 58.3), 125);
@@ -97,7 +97,7 @@ export class DotsComponent implements OnInit {
       ctx.stroke();
     }
 
-    for (let i = 0; i < this.settings.numberOfRectangles.value; i++) {
+    for (let i = 0; i < this.settings['numberOfRectangles'].value; i++) {
       ctx.beginPath();
       ctx.rect(8.3 + (i * 58.3), 25, 50, 50);
 
@@ -119,7 +119,7 @@ export class DotsComponent implements OnInit {
     let actualHandicap = this.getHandicap();
     let alreadyHandicapped = actualHandicap == Handicap.None;
 
-    for (let i = 0; i < this.settings.numberOfRectangles.value; i++) {
+    for (let i = 0; i < this.settings['numberOfRectangles'].value; i++) {
 
       let size = 50;
 
@@ -154,14 +154,14 @@ export class DotsComponent implements OnInit {
       });
 
 
-      if (this.settings.helpColor.value)
+      if (this.settings['helpColor'].value)
         color = this.colors[++colornumber];
 
-      if (this.settings.helpSize.value === true)
+      if (this.settings['helpSize'].value === true)
         pointSize++;
     }
 
-    for (let i = 0; i < this.settings.numberOfTriangles.value; i++) {
+    for (let i = 0; i < this.settings['numberOfTriangles'].value; i++) {
       let size = 50;
 
       // HANDICAP - SMALLER OBJECT
@@ -194,9 +194,9 @@ export class DotsComponent implements OnInit {
         this.drawCoordinates(canvas, coord, pointSize, color);
       });
 
-      if (this.settings.helpColor.value)
+      if (this.settings['helpColor'].value)
         color = this.colors[++colornumber];
-      if (this.settings.helpSize.value === true)
+      if (this.settings['helpSize'].value === true)
         pointSize++;
     }
 
@@ -212,7 +212,7 @@ export class DotsComponent implements OnInit {
   }
 
   private drawCoordinates(canvas: HTMLCanvasElement, coord: Vector2D, pointSize: number, color: string): void {
-    let ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     ctx.fillStyle = color; // Red color
 

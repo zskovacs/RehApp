@@ -43,7 +43,7 @@ export class MirrorComponent implements OnInit {
       this.renderer.removeChild(this.drawArea.nativeElement, child);
     });
 
-    for (let i = 0; i < this.settings.numberOfExercises.value; i++) {
+    for (let i = 0; i < this.settings['numberOfExercises'].value; i++) {
       const canvas = this.renderer.createElement('canvas');
       //this.renderer.appendChild(this.drawArea.nativeElement, canvas);
       this.renderer.setProperty(canvas, "height", this.height);
@@ -60,14 +60,14 @@ export class MirrorComponent implements OnInit {
   }
 
   private drawShapes(canvas: HTMLCanvasElement): string {
-    if (this.settings.hcNoGrid.value === false)
+    if (this.settings['hcNoGrid'].value === false)
       this.drawGrid(canvas);
 
     this.drawMirror(canvas);
 
     let vertices = this.getVertices();
 
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -77,7 +77,7 @@ export class MirrorComponent implements OnInit {
     });
     ctx.stroke();
 
-    if (this.settings.helpPoints.value === true) {
+    if (this.settings['helpPoints'].value === true) {
       let helpingPoints = vertices.map<Vector2D>(p => {
         p.x = this.width - p.x;
         return p;
@@ -93,7 +93,7 @@ export class MirrorComponent implements OnInit {
 
   private getYPositions(): Array<number> {
     let positions = Array.from({ length: 9 }, (v, k) => k * this.step).map(x => x + this.step); // 20-180
-    let vertices = this.settings.vertices.value;
+    let vertices = this.settings['vertices'].value;
 
     let result = new Array(vertices),
       len = positions.length,
@@ -127,7 +127,7 @@ export class MirrorComponent implements OnInit {
 
        let posX = this.getXPosition(last.x);
 
-      if (this.settings.hcOblique.value === false || Math.random() >= 0.3) {
+      if (this.settings['hcOblique'].value === false || Math.random() >= 0.3) {
         let connectPoint = new Vector2D(posX, last.y);
         points.push(connectPoint);
       }
@@ -144,7 +144,7 @@ export class MirrorComponent implements OnInit {
 
 
   private drawMirror(canvas: HTMLCanvasElement): void {
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.strokeStyle = '#f20019';
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -154,7 +154,7 @@ export class MirrorComponent implements OnInit {
   }
 
   private drawGrid(canvas: HTMLCanvasElement): void {
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.strokeStyle = '#d4d4d4';
     ctx.beginPath();
     for (let x = 0; x <= this.width; x += 20) {
@@ -170,7 +170,7 @@ export class MirrorComponent implements OnInit {
   }
 
   private drawCoordinates(canvas: HTMLCanvasElement, coord: Vector2D, pointSize: number, color: string): void {
-    let ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     ctx.fillStyle = color; // Red color
 
