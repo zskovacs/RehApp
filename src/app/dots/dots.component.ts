@@ -1,5 +1,15 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
-import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2, inject } from '@angular/core';
+import { FormGroup, AbstractControl, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxPrintModule } from 'ngx-print';
+
 import { Vector2D } from '../shared/models/vector2d';
 import { Handicap } from './models/handicap';
 import { Shape } from './models/shape';
@@ -10,24 +20,39 @@ type Triangle = [Vector2D, Vector2D, Vector2D];
 @Component({
   selector: 'app-dots',
   templateUrl: './dots.component.html',
-  styleUrls: ['./dots.component.scss']
+  styleUrls: ['./dots.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    TranslateModule,
+    NgxPrintModule
+  ]
 })
 export class DotsComponent implements OnInit {
+  private renderer = inject(Renderer2);
+  private _formBuilder = inject(FormBuilder);
 
-  @ViewChild('drawingArea', { static: false }) drawArea: ElementRef;
+  @ViewChild('drawingArea', { static: false }) drawArea!: ElementRef;
 
-  public isGenerated: boolean;
-  public settingsForm: FormGroup;
+  public isGenerated: boolean = false;
+  public settingsForm!: FormGroup;
 
-  private handicaps: Array<Handicap>;
+  private handicaps: Array<Handicap> = [];
   private readonly shapeSize = 50;
   private readonly width = 200;
   private readonly height = 200;
 
   private colors = ["#262626", "#f20019", "#70fe00", "#0086fe", "#fefe00", "fed38b"];
 
-  constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
-    this.handicaps = new Array<Handicap>();
+  constructor() {
+    // Init logic handled in field declarations or ngOnInit
   }
 
   public get settings(): { [key: string]: AbstractControl } {

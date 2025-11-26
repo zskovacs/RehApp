@@ -1,8 +1,21 @@
-@import "../theme.scss";
-$accent: map-get($theme, accent);
+@use '@angular/material' as mat;
+@use '../theme-colors' as my-theme;
+
+// Flex Layout Replacements
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+}
+
 .header {
     height: 5px;
-    background-color: mat-color($accent);
+    background-color: mat.m2-get-color-from-palette(my-theme.$accent);
 }
 .container {
     padding-top: 20px;
@@ -29,9 +42,9 @@ h1.title {
 }
 
 span.color {
-    color: mat-color($accent);
+    color: mat.m2-get-color-from-palette(my-theme.$accent);
 }
 
 a {
-    color: mat-color($accent);
+    color: mat.m2-get-color-from-palette(my-theme.$accent);
 }

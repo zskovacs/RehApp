@@ -1,3 +1,83 @@
-.watermark {
-    visibility: hidden;
+.mirror-container {
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+
+  @media (max-width: 599px) {
+    flex-direction: column;
+    gap: 20px;
   }
+}
+
+.sidebar {
+  flex: 0 0 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 599px) {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.drawing-section {
+  margin-top: 50px;
+  flex: 0 0 75%;
+  width: 75%;
+
+  @media (max-width: 599px) {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+.watermark {
+  opacity: 0.1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  pointer-events: none;
+}
+
+/* Canvas styling helper (if needed) */
+::ng-deep img {
+    border: solid 1px grey;
+    margin: 5px;
+}

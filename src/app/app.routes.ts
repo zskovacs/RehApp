@@ -1,10 +1,8 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { DotsComponent } from './dots/dots.component';
 import { MirrorComponent } from './mirror/mirror.component';
 
-
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: '/dots',
@@ -25,8 +23,3 @@ const routes: Routes = [
   }
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

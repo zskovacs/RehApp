@@ -1,33 +1,53 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, inject } from '@angular/core';
+import { FormBuilder, AbstractControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxPrintModule } from 'ngx-print';
 import { Vector2D } from '../shared/models/vector2d';
 
 @Component({
   selector: 'app-mirror',
   templateUrl: './mirror.component.html',
-  styleUrls: ['./mirror.component.scss']
+  styleUrls: ['./mirror.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    TranslateModule,
+    NgxPrintModule
+  ]
 })
-
 export class MirrorComponent implements OnInit {
+  private renderer = inject(Renderer2);
+  private _formBuilder = inject(FormBuilder);
 
-  @ViewChild('drawingArea', { static: false }) drawArea: ElementRef;
+  @ViewChild('drawingArea', { static: false }) drawArea!: ElementRef;
 
-  public isGenerated: boolean;
-  public settingsForm: FormGroup;
+  public isGenerated: boolean = false;
+  public settingsForm!: FormGroup;
 
   private readonly width = 200;
   private readonly height = 200;
   private readonly step = 20;
-
-  constructor(private renderer: Renderer2, private _formBuilder: FormBuilder) {
-
-  }
 
   public get settings(): { [key: string]: AbstractControl } {
     return this.settingsForm.controls;
   }
 
   ngOnInit() {
+    this.isGenerated = false;
     this.settingsForm = this._formBuilder.group({
       numberOfExercises: [12, Validators.required],
       vertices: ["3", Validators.compose([Validators.min(3), Validators.max(10), Validators.required])],
